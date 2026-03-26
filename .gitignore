@@ -3,3 +3,4 @@
 "database/*.db" 
 "google-credentials.json" 
 "*.log" 
+".env" 
