@@ -3,4 +3,3 @@
 "database/*.db" 
 "google-credentials.json" 
 "*.log" 
-".DS_Store" 
