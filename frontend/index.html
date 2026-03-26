@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Opportunity Research Platform | Property & Business Research Since 1970</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
+  <script src="https://js.stripe.com/v3/"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', Helvetica, sans-serif;
+      background: #F6F7F8;
+      color: #1F2933;
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    .container.narrow {
+      max-width: 800px;
+    }
+
+    section {
+      padding: 80px 0;
+    }
+
+    @media (max-width: 768px) { 
+      section { padding: 50px 0; }
+      .container { padding: 0 20px; }
+    }
+
+    .btn {
+      display: inline-block;
+      background: #2F5D8C;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 14px 32px;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .btn.full { width: 100%; }
+
+    header {
+      background: #FFFFFF;
+      text-align: center;
+      padding: 40px 20px 30px;
+    }
+    
+    /* LARGER LOGO STYLES */
+    .logo {
+      height: 180px;
+      margin: 0 auto 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .logo-img {
+      height: 100%;
+      width: auto;
+      max-width: 100%;
+      object-fit: contain;
+    }
+    .logo-placeholder {
+      display: none;
+      height: 100%;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid #E8EEF5;
+      padding: 0 40px;
+      font-weight: 600;
+      font-size: 32px;
+      color: #2F5D8C;
+    }
+    
+    /* Responsive Logo Sizes */
+    @media (max-width: 1200px) {
+      .logo { height: 160px; }
+    }
+    @media (max-width: 992px) {
+      .logo { height: 140px; }
+    }
+    @media (max-width: 992px) {
+      .logo { height: 140px; }
+      header { padding: 30px 16px 20px; }
+    }
+    @media (max-width: 576px) {
+      .logo { height: 100px; }
+      header { padding: 25px 12px 20px; }
+    }
+    @media (max-width: 480px) {
+      .logo { height: 85px; }
+      header { padding: 20px 10px 15px; }
+    }
+    
+    .platform-desc { 
+      margin-top: 4px; 
+      font-size: 1rem; 
+      color: #6B7280;
+      font-weight: 500;
+    }
+
+    nav {
+      margin-top: 22px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px 24px;
+    }
+    nav a { font-size: 14px; color: #6B7280; text-decoration: none; }
+    nav a:hover { color: #2F5D8C; }
+
+    .hero { text-align: center; }
+    .hero h1 { font-size: 48px; font-weight: 700; margin-bottom: 20px; }
+    .hero .subhead { font-size: 20px; color: #4B5563; max-width: 800px; margin: 0 auto; }
+
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 30px;
+      border: 1px solid #E8EEF5;
+    }
+
+    /* LVR Calculator */
+    .lvr-calculator {
+      background: #FFFFFF;
+      border-radius: 24px;
+      padding: 40px;
+      margin: 40px 0;
+      border: 1px solid #E8EEF5;
+    }
+    .calc-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 30px;
+      margin-bottom: 30px;
+    }
+    .calc-field {
+      flex: 1 1 250px;
+    }
+    .calc-field label {
+      font-size: 14px;
+      font-weight: 500;
+      display: block;
+      margin-bottom: 8px;
+    }
+    .calc-field input {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1px solid #E8EEF5;
+      border-radius: 12px;
+      background: #F9FAFC;
+    }
+    .lvr-result {
+      font-size: 32px;
+      font-weight: 600;
+      color: #2F5D8C;
+    }
+    .calc-disclaimer {
+      margin-top: 20px;
+      font-size: 12px;
+      color: #6B7280;
+      padding-top: 20px;
+      border-top: 1px dashed #d4dce6;
+    }
+
+    /* Form Card */
+    .form-card {
+      background: #FFFFFF;
+      border-radius: 24px;
+      padding: 40px;
+      border: 1px solid #E8EEF5;
+    }
+    .form-group { margin-bottom: 24px; }
+    .form-group label {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 8px;
+      color: #4B5563;
+    }
+    .form-group input, .form-group textarea, .form-group select {
+      width: 100%;
+      padding: 14px 18px;
+      border: 1px solid #E2E8F0;
+      border-radius: 12px;
+      font-size: 15px;
+      background: #F9FAFC;
+      font-family: 'Inter', sans-serif;
+    }
+    .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+      border-color: #2F5D8C;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(47,93,140,0.1);
+      background: white;
+    }
+    
+    /* Radio Group */
+    .radio-group {
+      margin: 15px 0;
+    }
+    .radio-option {
+      display: flex;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .radio-option input[type="radio"] {
+      width: 20px;
+      height: 20px;
+      margin-right: 12px;
+      cursor: pointer;
+    }
+    .radio-option label {
+      font-size: 15px;
+      cursor: pointer;
+    }
+    .helper-text {
+      font-size: 13px;
+      color: #6B7280;
+      margin-top: 8px;
+      font-style: italic;
+    }
+    
+    /* Compliance Checkbox */
+    .compliance-checkbox {
+      background: #F9FAFC;
+      padding: 20px;
+      border-radius: 12px;
+      margin: 20px 0;
+      border: 1px solid #E8EEF5;
+    }
+    .compliance-checkbox label {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 15px;
+      font-size: 13px;
+    }
+    .compliance-checkbox input {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    
+    /* Membership Panel */
+    .membership-panel {
+      background: #FFFFFF;
+      border-radius: 24px;
+      padding: 40px;
+      text-align: center;
+      border: 1px solid rgba(47,93,140,0.15);
+      margin-top: 40px;
+    }
+    .price-tag {
+      font-size: 48px;
+      font-weight: 700;
+      color: #2F5D8C;
+      margin: 20px 0;
+    }
+    .membership-list {
+      list-style: none;
+      padding: 0;
+      text-align: left;
+      max-width: 300px;
+      margin: 20px auto;
+    }
+    .membership-list li {
+      padding: 8px 0 8px 28px;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%232F5D8C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>') left center no-repeat;
+      background-size: 16px;
+    }
+    
+    .alert { display: none; padding: 12px; border-radius: 8px; margin-top: 15px; }
+    .alert-error { background: #FEE2E2; color: #991B1B; display: block; }
+    .alert-success { background: #D1FAE5; color: #065F46; display: block; }
+    .alert-info { background: #DBEAFE; color: #1E40AF; display: block; }
+    
+    .confirmation-box {
+      background: #E8EEF5;
+      padding: 30px;
+      margin-top: 30px;
+      border-radius: 20px;
+      text-align: center;
+    }
+    .hidden { display: none; }
+
+    footer {
+      background: #FFFFFF;
+      text-align: center;
+      padding: 40px 20px;
+      border-top: 1px solid #E8EEF5;
+      margin-top: 40px;
+    }
+    .footer-disclaimer {
+      background: #edf2f7;
+      border-left: 4px solid #2F5D8C;
+      padding: 20px;
+      margin: 30px auto;
+      max-width: 1000px;
+      text-align: left;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <img src="logo.png" alt="Opportunity Research Platform" class="logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+    <div class="logo-placeholder">ORP</div>
+  </div>
+  <div class="platform-desc">Opportunity Research Platform</div>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="deal-pipeline.html">Deal Pipeline</a>
+    <a href="important-participation-info.html">Important Info</a>
+    <a href="admin.html">Admin</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="container narrow">
+    <h1>Researching Property and Business Opportunities Since 1970</h1>
+    <div class="subhead">Identifying development, restructuring, and asset repositioning opportunities where property and business value may be unlocked through disciplined research.</div>
+    
+    <div style="margin: 40px 0 20px;">
+      <h2 style="font-size: 28px;">Opportunity Research Platform</h2>
+      <p style="font-size: 18px; color: #4B5563;">Join our community of property investors and business professionals.</p>
+    </div>
+    
+    <div class="card" style="background: #E8EEF5; border-left: 4px solid #2F5D8C;">
+      <p style="font-size: 18px; margin: 0;">Operated by property professionals with over five decades of experience in property research, development opportunities, business restructuring, and asset repositioning across multiple sectors.</p>
+    </div>
+  </div>
+</section>
+
+<!-- LVR Calculator (Public) -->
+<section>
+  <div class="container narrow">
+    <div class="lvr-calculator">
+      <h3 style="margin-bottom: 20px; color: #2F5D8C;">Your Loan-to-Value Ratio (LVR) Calculator</h3>
+      <p style="margin-bottom: 20px;">Enter your property value and mortgage balance to see your LVR and available equity.</p>
+      
+      <div class="calc-row">
+        <div class="calc-field">
+          <label>Total Property Value ($)</label>
+          <input type="number" id="propertyValue" placeholder="e.g. 850000">
+        </div>
+        <div class="calc-field">
+          <label>Total Mortgage Balance ($)</label>
+          <input type="number" id="mortgageBalance" placeholder="e.g. 450000">
+        </div>
+      </div>
+      
+      <div style="display: flex; align-items: baseline; gap: 15px; flex-wrap: wrap;">
+        <span class="lvr-result" id="lvrResult">—</span>
+        <span>Loan-to-Value Ratio</span>
+      </div>
+      <div style="margin-top: 15px;">
+        <span>Estimated Equity: <strong id="equityResult">$0</strong></span>
+      </div>
+      <div class="calc-disclaimer">
+        This is an indicative calculation only. Actual LVR may vary based on lender criteria.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EOI FORM SECTION -->
+<section id="eoi">
+  <div class="container narrow">
+    <h2 style="text-align: center;">Expression of Interest</h2>
+    <p style="text-align: center; margin-bottom: 30px;">Complete the form below to start your journey with us.</p>
+    
+    <div id="eoiStatus" class="alert"></div>
+    <div id="eoiSuccess" class="confirmation-box hidden">
+      <h3 style="font-weight:600; margin-bottom:10px;">✅ Submission Received</h3>
+      <p>Thank you for your Expression of Interest.<br>Your information has been submitted successfully.<br>You can now proceed to payment to activate your membership.</p>
+    </div>
+    
+    <div class="form-card">
+      <div class="form-group">
+        <label>Full Legal Name *</label>
+        <input type="text" id="fullName" required>
+      </div>
+      
+      <div class="form-group">
+        <label>Email Address *</label>
+        <input type="email" id="email" required>
+      </div>
+      
+      <div class="form-group">
+        <label>Phone Number</label>
+        <input type="tel" id="phone">
+      </div>
+      
+      <div class="form-group">
+        <label>Property/Business Profile *</label>
+        <textarea id="propertyProfile" rows="3" placeholder="Describe your property or business situation..." required></textarea>
+      </div>
+      
+      <div class="form-group">
+        <label>Options Explored *</label>
+        <textarea id="optionsExplored" rows="2" placeholder="What options have you considered?" required></textarea>
+      </div>
+      
+      <!-- PARTICIPATION QUESTION -->
+      <div class="form-group">
+        <label>How would you like to participate? *</label>
+        <div class="radio-group">
+          <div class="radio-option">
+            <input type="radio" id="participateEquity" name="participationType" value="equity" required>
+            <label for="participateEquity">I want to use equity from my property</label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" id="participateCash" name="participationType" value="cash">
+            <label for="participateCash">I want to invest cash</label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" id="participateBoth" name="participationType" value="both">
+            <label for="participateBoth">I want to use both equity and cash</label>
+          </div>
+        </div>
+        <div class="helper-text">
+          This helps us understand how you may participate in future opportunities.
+        </div>
+      </div>
+      
+      <!-- COMPLIANCE CHECKBOXES -->
+      <div class="compliance-checkbox">
+        <p style="font-weight:500; margin-bottom:15px;">Please confirm:</p>
+        
+        <label>
+          <input type="checkbox" id="complianceCheck1" required>
+          <span>I confirm that I have read and understood the <a href="important-participation-info.html" target="_blank" style="color:#2F5D8C;">Important Participation Information</a> and acknowledge that I must obtain independent professional advice before making any participation decision.</span>
+        </label>
+        
+        <label style="margin-top:15px;">
+          <input type="checkbox" id="complianceCheck2" required>
+          <span>I confirm that any financial or personal information I provide is true and accurate to the best of my knowledge and has not been falsified or misrepresented.</span>
+        </label>
+      </div>
+      
+      <input type="hidden" id="ipAddress" value="">
+      
+      <button class="btn full" id="submitEoiBtn">Submit Interest</button>
+    </div>
+  </div>
+</section>
+
+<!-- MEMBERSHIP SECTION - Shows after EOI submission -->
+<section id="membership">
+  <div class="container narrow">
+    <div class="membership-panel">
+      <h2 style="margin-bottom: 20px;">Complete Your Membership</h2>
+      <div class="price-tag">$695 <span style="font-size: 18px; font-weight:400; color:#6B7280;">USD / year</span></div>
+      
+      <p style="margin: 20px 0;">After payment, you'll receive:</p>
+      <ul class="membership-list">
+        <li>Access to Deal Pipeline Dashboard</li>
+        <li>Opportunity research updates</li>
+        <li>Notifications when opportunities progress</li>
+        <li>Login credentials via email</li>
+      </ul>
+      
+      <button class="btn full" id="checkout-button" style="margin-top: 20px;">
+        Pay Now — $695 USD
+      </button>
+      
+      <div id="payment-message" class="alert"></div>
+      
+      <p style="margin-top: 20px; font-size: 12px; color: #6B7280;">
+        You'll receive login credentials after payment. Complete your financial profile after login.
+      </p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-links">
+    <a href="index.html">Home</a> · 
+    <a href="deal-pipeline.html">Deal Pipeline</a> · 
+    <a href="important-participation-info.html">Important Information</a> · 
+    <a href="admin.html">Admin</a>
+  </div>
+  <div class="footer-disclaimer">
+    <p style="font-weight:500; margin-bottom:10px;">⚠️ Legal Disclaimer</p>
+    <p>This platform operates solely as an information and research gateway and does not act as a financial services provider, broker, lender, financial adviser, or investment manager. Independent professional advice is mandatory before making any participation decision.</p>
+  </div>
+  <p>© 2026 Opportunity Research Platform. All rights reserved.</p>
+</footer>
+
+<script>
+  const API_BASE = 'http://localhost:3000/api';
+  const stripe = Stripe('pk_live_ew3iLyPNFzL99oqwNFqIFz02');
+
+  // LVR Calculator
+  function updateLVR() {
+    const propValue = parseFloat(document.getElementById('propertyValue').value) || 0;
+    const mortgageBal = parseFloat(document.getElementById('mortgageBalance').value) || 0;
+    
+    if (propValue > 0) {
+      const lvr = (mortgageBal / propValue) * 100;
+      document.getElementById('lvrResult').textContent = lvr.toFixed(1) + '%';
+      const equity = propValue - mortgageBal;
+      document.getElementById('equityResult').textContent = '$' + equity.toLocaleString();
+    } else {
+      document.getElementById('lvrResult').textContent = '—';
+      document.getElementById('equityResult').textContent = '$0';
+    }
+  }
+  
+  document.getElementById('propertyValue').addEventListener('input', updateLVR);
+  document.getElementById('mortgageBalance').addEventListener('input', updateLVR);
+
+  // Get IP address
+  let ipAddress = '127.0.0.1';
+  fetch('https://api.ipify.org?format=json')
+    .then(response => response.json())
+    .then(data => { ipAddress = data.ip; })
+    .catch(() => {});
+
+  // Submit EOI Form
+  document.getElementById('submitEoiBtn').addEventListener('click', async () => {
+    const name = document.getElementById('fullName').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const profile = document.getElementById('propertyProfile').value.trim();
+    const options = document.getElementById('optionsExplored').value.trim();
+    
+    const participationEquity = document.getElementById('participateEquity').checked;
+    const participationCash = document.getElementById('participateCash').checked;
+    const participationBoth = document.getElementById('participateBoth').checked;
+    
+    let participationType = '';
+    if (participationEquity) participationType = 'equity';
+    else if (participationCash) participationType = 'cash';
+    else if (participationBoth) participationType = 'both';
+    
+    const compliance1 = document.getElementById('complianceCheck1').checked;
+    const compliance2 = document.getElementById('complianceCheck2').checked;
+    
+    const statusDiv = document.getElementById('eoiStatus');
+    const successDiv = document.getElementById('eoiSuccess');
+    
+    successDiv.classList.add('hidden');
+    
+    if (!name || !email || !profile || !options) {
+      statusDiv.className = 'alert alert-error';
+      statusDiv.innerHTML = '❌ Please complete all required fields.';
+      statusDiv.style.display = 'block';
+      return;
+    }
+    
+    if (!participationType) {
+      statusDiv.className = 'alert alert-error';
+      statusDiv.innerHTML = '❌ Please select how you would like to participate.';
+      statusDiv.style.display = 'block';
+      return;
+    }
+    
+    if (!compliance1 || !compliance2) {
+      statusDiv.className = 'alert alert-error';
+      statusDiv.innerHTML = '❌ You must confirm both compliance statements to proceed.';
+      statusDiv.style.display = 'block';
+      return;
+    }
+    
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      statusDiv.className = 'alert alert-error';
+      statusDiv.innerHTML = '❌ Please enter a valid email address.';
+      statusDiv.style.display = 'block';
+      return;
+    }
+    
+    statusDiv.className = 'alert alert-info';
+    statusDiv.innerHTML = '⏳ Submitting your information...';
+    statusDiv.style.display = 'block';
+    
+    const formData = {
+      fullName: name,
+      email: email,
+      phone: phone || null,
+      propertyProfile: profile,
+      optionsExplored: options,
+      participationType: participationType,
+      complianceConfirmed: compliance1,
+      infoAccuracyConfirmed: compliance2,
+      ipAddress: ipAddress,
+      timestamp: new Date().toISOString()
+    };
+    
+    try {
+      const response = await fetch(`${API_BASE}/members`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+      
+      const data = await response.json();
+      
+      if (response.ok) {
+        if (data.id) {
+          localStorage.setItem('currentMemberId', data.id);
+        }
+        
+        statusDiv.style.display = 'none';
+        successDiv.classList.remove('hidden');
+        
+        // Clear form
+        document.getElementById('fullName').value = '';
+        document.getElementById('email').value = '';
+        document.getElementById('phone').value = '';
+        document.getElementById('propertyProfile').value = '';
+        document.getElementById('optionsExplored').value = '';
+        document.getElementById('participateEquity').checked = false;
+        document.getElementById('participateCash').checked = false;
+        document.getElementById('participateBoth').checked = false;
+        document.getElementById('complianceCheck1').checked = false;
+        document.getElementById('complianceCheck2').checked = false;
+        
+        successDiv.scrollIntoView({ behavior: 'smooth' });
+        
+        setTimeout(() => {
+          successDiv.classList.add('hidden');
+        }, 8000);
+      } else {
+        statusDiv.className = 'alert alert-error';
+        statusDiv.innerHTML = `❌ Error: ${data.error || 'Submission failed'}`;
+      }
+    } catch (error) {
+      statusDiv.className = 'alert alert-error';
+      statusDiv.innerHTML = '❌ Cannot connect to server. Please try again later.';
+    }
+  });
+
+  // Payment Checkout
+  document.getElementById('checkout-button').addEventListener('click', async () => {
+    const button = document.getElementById('checkout-button');
+    const memberId = localStorage.getItem('currentMemberId');
+    const messageDiv = document.getElementById('payment-message');
+    
+    messageDiv.style.display = 'none';
+    
+    if (!memberId) {
+      messageDiv.textContent = 'Please submit an Expression of Interest first.';
+      messageDiv.className = 'alert alert-error';
+      messageDiv.style.display = 'block';
+      return;
+    }
+    
+    button.disabled = true;
+    button.textContent = 'Processing...';
+
+    try {
+      const response = await fetch(`${API_BASE}/payments/create-checkout-session`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          member_id: memberId
+        })
+      });
+
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to create checkout session');
+      }
+
+      const { error: stripeError } = await stripe.redirectToCheckout({ sessionId: data.sessionId });
+      if (stripeError) throw stripeError;
+      
+    } catch (err) {
+      console.error('❌ Payment error:', err);
+      messageDiv.textContent = err.message;
+      messageDiv.className = 'alert alert-error';
+      messageDiv.style.display = 'block';
+      button.disabled = false;
+      button.textContent = 'Pay Now — $695 USD';
+    }
+  });
+
+  (function() {
+    const logoImg = document.querySelector('.logo-img');
+    const fallback = document.querySelector('.logo-placeholder');
+    if (logoImg && fallback) {
+      logoImg.onerror = function() {
+        this.style.display = 'none';
+        fallback.style.display = 'flex';
+      };
+    }
+  })();
+</script>
+</body>
+</html>

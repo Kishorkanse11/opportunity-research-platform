@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Not Found | Opportunity Research Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #F6F7F8 0%, #E8EEF5 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #1F2933;
+        }
+        .error-container {
+            text-align: center;
+            max-width: 600px;
+            padding: 40px;
+            background: white;
+            border-radius: 32px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.1);
+            margin: 20px;
+            border: 1px solid rgba(47,93,140,0.1);
+        }
+        .error-code {
+            font-size: 120px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #2F5D8C 0%, #1A2F4B 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+            margin-bottom: 20px;
+        }
+        h1 {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #1F2933;
+        }
+        p {
+            color: #6B7280;
+            margin-bottom: 32px;
+            font-size: 18px;
+            line-height: 1.6;
+        }
+        .btn {
+            display: inline-block;
+            background: #2F5D8C;
+            color: white;
+            padding: 14px 32px;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 500;
+            transition: all 0.2s;
+            margin: 0 8px;
+        }
+        .btn:hover {
+            background: #1f4a73;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(47,93,140,0.2);
+        }
+        .btn-outline {
+            background: transparent;
+            color: #2F5D8C;
+            border: 1px solid #2F5D8C;
+        }
+        .btn-outline:hover {
+            background: #F0F4F9;
+            transform: translateY(-2px);
+        }
+        .search-box {
+            margin: 32px 0;
+            position: relative;
+        }
+        .search-box input {
+            width: 100%;
+            padding: 14px 20px;
+            border: 1px solid #E2E8F0;
+            border-radius: 12px;
+            font-size: 16px;
+            background: #F9FAFC;
+            transition: all 0.2s;
+        }
+        .search-box input:focus {
+            border-color: #2F5D8C;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(47,93,140,0.1);
+        }
+        .search-box button {
+            position: absolute;
+            right: 8px;
+            top: 8px;
+            background: #2F5D8C;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        .footer {
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 1px solid #E8EEF5;
+            font-size: 13px;
+            color: #9CA3AF;
+        }
+        .footer a {
+            color: #2F5D8C;
+            text-decoration: none;
+        }
+        @media (max-width: 768px) {
+            .error-code { font-size: 80px; }
+            .btn { display: block; margin: 12px auto; width: 80%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <div class="error-code">404</div>
+        <h1>Page Not Found</h1>
+        <p>Sorry, we couldn't find the page you're looking for. It might have been moved, deleted, or never existed.</p>
+        
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Search our website...">
+            <button onclick="searchSite()">Search</button>
+        </div>
+        
+        <div>
+            <a href="index.html" class="btn">🏠 Back to Home</a>
+            <a href="deal-pipeline.html" class="btn btn-outline">📊 Deal Pipeline</a>
+        </div>
+        
+        <div class="footer">
+            <p>Need help? <a href="mailto:info@techmanali.in">Contact Support</a></p>
+            <p style="margin-top: 8px;">© 2026 Opportunity Research Platform</p>
+        </div>
+    </div>
+
+    <script>
+        function searchSite() {
+            const query = document.getElementById('searchInput').value;
+            if (query.trim()) {
+                window.location.href = `index.html?search=${encodeURIComponent(query)}`;
+            }
+        }
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') searchSite();
+        });
+    </script>
+</body>
+</html>

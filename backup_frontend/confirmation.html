@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Membership Confirmed · Homeowners Equity & Liquidity Plan</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- same Inter font as main site -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', Helvetica, sans-serif;
+      background: #F6F7F8;        /* main site background */
+      color: #1F2933;              /* primary text */
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .narrow {
+      max-width: 560px;
+    }
+
+    /* soft section background (matching #E8EEF5 from main site) */
+    .section {
+      background: #E8EEF5;
+      border-radius: 32px;
+      padding: 60px 40px;
+      box-shadow: 0 12px 30px -8px rgba(0, 0, 0, 0.05);
+      text-align: center;
+      width: 100%;
+      transition: box-shadow 0.2s;
+    }
+
+    .section:hover {
+      box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.08);
+    }
+
+    h2 {
+      font-weight: 600;
+      font-size: 32px;
+      color: #1F2933;
+      margin-bottom: 24px;
+      letter-spacing: -0.3px;
+    }
+
+    /* subtle accent line */
+    .accent-line {
+      width: 60px;
+      height: 3px;
+      background: #2F5D8C;        /* exact accent blue */
+      margin: 0 auto 32px auto;
+      border-radius: 2px;
+    }
+
+    p {
+      font-size: 17px;
+      color: #1F2933;
+      font-weight: 400;
+      line-height: 1.7;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    /* soft highlight for important part */
+    .highlight {
+      font-weight: 500;
+      color: #2F5D8C;
+    }
+
+    .micro-muted {
+      font-size: 14px;
+      color: #6B7280;
+      margin-top: 32px;
+      border-top: 1px solid #d2dde9;
+      padding-top: 24px;
+    }
+
+    /* optional subtle icon/checkmark */
+    .checkmark {
+      font-size: 56px;
+      color: #2F5D8C;
+      margin-bottom: 10px;
+      line-height: 1;
+    }
+
+    /* button to go back to main site (optional but user-friendly) */
+    .btn {
+      display: inline-block;
+      background: #2F5D8C;
+      color: #FFFFFF;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 28px;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      margin-top: 32px;
+      transition: background-color 0.15s;
+    }
+    .btn:hover {
+      background-color: #1f4a73;
+    }
+
+    @media (max-width: 500px) {
+      .section { padding: 40px 20px; }
+      h2 { font-size: 28px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container narrow">
+  <div class="section">
+    <!-- subtle check icon to reinforce confirmation (light touch) -->
+    <div class="checkmark">✓</div>
+    <h2>Membership Registration Confirmed</h2>
+    <div class="accent-line"></div>
+
+    <p>
+      Thank you for registering your Annual Membership.<br><br>
+      Your submission is now under <span class="highlight">administrative review</span>.<br><br>
+      A member of our team will contact you within <span class="highlight">48 hours</span>.<br><br>
+      <span style="font-size: 16px;">Independent professional advice remains mandatory before entering any transaction.</span>
+    </p>
+
+    <!-- small muted reminder (legal consistency) -->
+    <div class="micro-muted">
+      Homeowners Equity & Liquidity Plan – property research & syndication gateway
+    </div>
+
+    <!-- optional return link (doesn't break any rule) -->
+    <a href="index.html" class="btn">Return to Gateway</a>
+  </div>
+</div>
+
+</body>
+</html>

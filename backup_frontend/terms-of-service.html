@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Homeowners Equity & Liquidity Plan · terms & conditions</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
+  <!-- Inter font (clean sans-serif) – same as index -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* ---------- exact style from index page, adapted for terms ---------- */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', Helvetica, sans-serif;
+      background: #F6F7F8;      /* master background */
+      color: #1F2933;            /* primary text */
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    .container.narrow {
+      max-width: 800px;          /* for readability – same as index narrow */
+    }
+
+    /* section spacing identical to index */
+    section { padding: 80px 0; }
+    @media (max-width: 768px) { 
+      section { padding: 50px 0; }
+      .container { padding: 0 20px; }
+    }
+    @media (max-width: 480px) {
+      section { padding: 40px 0; }
+      .container { padding: 0 16px; }
+    }
+
+    /* fade animations (kept from index for consistency) */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(12px);
+      animation: fadeUp 0.6s ease forwards;
+    }
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-in {
+      opacity: 0;
+      animation: fadeIn 0.8s ease forwards;
+    }
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    /* ----- header (centered, white, no shadow) ----- */
+    header {
+      background: #FFFFFF;
+      text-align: center;
+      padding: 30px 20px;
+      opacity: 0;
+      animation: fadeIn 0.5s ease forwards;
+    }
+    .logo {
+      height: 100px;              /* desktop 100px */
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .logo-img {
+      height: 100%;
+      width: auto;
+      max-width: 100%;
+      object-fit: contain;
+    }
+    .logo-placeholder {
+      display: none;
+      height: 100%;
+      align-items: center;
+      border: 2px solid #E8EEF5;
+      padding: 0 30px;
+      font-weight: 600;
+      color: #2F5D8C;
+    }
+    @media (max-width: 768px) {
+      .logo { height: 70px; }    /* mobile 70px */
+      header { padding: 20px 16px; }
+    }
+
+    /* tagline – exactly as index (muted) */
+    .tagline {
+      margin-top: 8px;
+      font-size: 1rem;
+      color: #6B7280;
+      font-weight: 400;
+    }
+
+    /* navigation – muted grey, small */
+    nav {
+      margin-top: 22px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px 24px;
+    }
+    nav a {
+      font-size: 14px;
+      color: #6B7280;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    nav a:hover { color: #2F5D8C; }
+
+    /* card style – same as index calculator / form cards */
+    .card {
+      background: #FFFFFF;
+      border-radius: 24px;
+      padding: 40px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.02);
+      margin: 40px 0;
+      transition: box-shadow 0.3s;
+    }
+    .card:hover { box-shadow: 0 12px 28px rgba(0,0,0,0.04); }
+    @media (max-width: 768px) {
+      .card { padding: 30px 20px; }
+    }
+
+    /* typography */
+    h1 {
+      font-size: 42px;            /* like index h1 */
+      font-weight: 600;
+      line-height: 1.2;
+      margin-bottom: 20px;
+    }
+    h2 {
+      font-size: 32px;
+      font-weight: 600;
+      margin: 40px 0 20px;
+    }
+    h3 {
+      font-size: 20px;
+      font-weight: 600;
+      margin: 30px 0 15px;
+    }
+    p, li {
+      color: #1F2933;             /* primary text */
+      margin-bottom: 16px;
+    }
+    ul, ol {
+      padding-left: 24px;
+      margin-bottom: 24px;
+    }
+    li {
+      margin-bottom: 8px;
+    }
+
+    .last-updated {
+      font-size: 14px;
+      color: #6B7280;
+      border-bottom: 1px solid #E8EEF5;
+      padding-bottom: 25px;
+      margin-bottom: 30px;
+    }
+
+    /* soft background block – same as index soft-bg */
+    .soft-bg-block {
+      background: #E8EEF5;
+      border-radius: 24px;
+      padding: 30px;
+      margin: 30px 0;
+      border-left: 4px solid #2F5D8C;
+    }
+
+    /* button style – exact index style */
+    .btn {
+      display: inline-block;
+      background: #2F5D8C;
+      color: #FFFFFF;
+      border: none;
+      border-radius: 8px;
+      padding: 14px 32px;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      border: 0;
+      box-shadow: none;
+      transition: background 0.2s;
+    }
+    .btn:hover { background: #1f4a73; }
+    .btn-outline {
+      background: transparent;
+      color: #2F5D8C;
+      border: 1px solid #2F5D8C;
+    }
+    .btn-outline:hover { background: #E8EEF5; }
+
+    /* footer – exact index footer */
+    footer {
+      background: #FFFFFF;
+      text-align: center;
+      padding: 40px 20px;
+      font-size: 13px;
+      color: #6B7280;
+      border-top: 1px solid #E8EEF5;
+    }
+    .footer-links {
+      margin: 20px 0 10px;
+    }
+    .footer-links a {
+      color: #2F5D8C;
+      text-decoration: none;
+      margin: 0 12px;
+      font-size: 13px;
+    }
+
+    /* print support */
+    .print-only { display: none; }
+    @media print {
+      .no-print, nav, footer { display: none; }
+      .print-only { display: block; }
+      body { background: white; }
+      .card { box-shadow: none; padding: 20px; }
+    }
+
+    /* extra utility */
+    hr {
+      border: none;
+      border-top: 1px solid #E8EEF5;
+      margin: 30px 0;
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER – identical to index (centered logo + tagline) -->
+<header class="no-print">
+  <div class="logo">
+    <img src="logo.png" alt="Homeowners Equity & Liquidity Plan" class="logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+    <div class="logo-placeholder">HELP</div>
+  </div>
+  <div class="tagline">Property Research & Syndication Gateway</div>
+  <nav>
+    <a href="#">About</a>
+    <a href="#">Process</a>
+    <a href="#">Important Info</a>
+    <a href="#">Admin Login</a>
+  </nav>
+</header>
+
+<!-- MAIN CONTENT – same container and card styling as index -->
+<main class="container narrow" style="margin-top:20px;">5
+  <div class="card fade-up" style="animation-delay:0.1s;">
+    <h1>Terms & Conditions</h1>
+    <div class="last-updated">
+      
+    
+    </div>
+
+    <!-- opening – calm, disclaimer tone -->
+    <p>Welcome to the Homeowners Equity & Liquidity Plan (HELP) administrative gateway. These Terms & Conditions govern your access to and use of our platform. By accessing or using the gateway, you agree to be bound by these terms. If you do not agree, please do not use our services.</p>
+
+    <!-- soft background block – like index snapshot section -->
+    <div class="soft-bg-block">
+      <strong>⚠️ Important notice:</strong> HELP operates solely as a private administrative gateway for structured property participation research. We do not provide financial advice, investment recommendations, or lending services. Independent professional advice is mandatory before any decision.
+    </div>
+
+    <h2>1. Platform Purpose & Role</h2>
+    <p>The HELP platform is designed to facilitate administrative intake, portfolio assessment, and eligibility screening for individuals interested in exploring potential property participation structures. We act as an intermediary gateway, not as a financial institution, investment adviser, or credit provider.</p>
+    <ul>
+      <li>We do not offer securities, managed funds, or investment products.</li>
+      <li>We do not provide valuations, appraisals, or lending approvals.</li>
+      <li>Any estimated figures (e.g., LVR calculator) are indicative only and must not be relied upon for financial decisions.</li>
+    </ul>
+
+    <h2>2. Membership & Fees</h2>
+    <h3>2.1 Annual administrative membership</h3>
+    <p>Access to certain platform features, including eligibility screening and gateway communications, requires an annual membership fee of $299 AUD. This fee is <strong>administrative in nature</strong> and is not an investment, deposit, or prepayment for any future allocation. Membership renews automatically each year unless cancelled prior to the renewal date. You will receive a 14‑day advance renewal notification email.</p>
+
+    <h3>2.2 No guarantee of participation</h3>
+    <p>Membership does not guarantee that you will be matched with any project, receive any allocation, or obtain any form of property participation. All opportunities are subject to third‑party structuring, eligibility criteria, and independent professional assessment.</p>
+
+    <h3>2.3 Cancellation & refunds</h3>
+    <p>You may cancel your membership at any time through your dashboard or by contacting us. Fees are non‑refundable except where required by law. If you cancel, access to member‑only areas will cease at the end of the current billing period.</p>
+
+    <h2>3. User Obligations & Representations</h2>
+    <p>By using the platform, you confirm that:</p>
+    <ul>
+      <li>You are at least 18 years old and have the legal capacity to enter this agreement.</li>
+      <li>All information you provide (including in the Expression of Interest and portfolio snapshot) is accurate, complete, and not misleading.</li>
+      <li>You will seek independent legal, financial, and tax advice before acting on any information obtained through the platform.</li>
+      <li>You will not use the platform for any unlawful purpose or attempt to reverse‑engineer its functionality.</li>
+    </ul>
+
+    <h2>4. Intellectual Property</h2>
+    <p>All content on the platform – including text, graphics, logos, calculators, and software – is the property of HELP or its licensors and is protected by copyright and trademark laws. You may not reproduce, distribute, or create derivative works without our express written permission.</p>
+
+    <h2>5. Third‑Party Links & Independent Advice</h2>
+    <p>The platform may contain links to third‑party websites or refer you to independent professionals. These are provided for convenience only; we do not endorse or control those third parties. Any engagement with a third party (including licensed advisers) is solely between you and that party. HELP accepts no liability for their advice or services.</p>
+
+    <h2>6. Limitation of Liability</h2>
+    <p>To the maximum extent permitted by law, HELP and its affiliates, directors, and employees shall not be liable for any indirect, incidental, special, or consequential damages arising out of or in connection with your use of the platform. This includes any loss of equity, investment loss, or failure to achieve anticipated liquidity.</p>
+    <p>Our total liability to you for any claim arising from these terms or your use of the platform is limited to the amount you have paid us (if any) in the preceding 12 months.</p>
+
+    <h2>7. Indemnification</h2>
+    <p>You agree to indemnify and hold harmless HELP from any claims, losses, liabilities, or expenses (including reasonable legal fees) arising out of your breach of these terms, your misuse of the platform, or any information you provide that is inaccurate or unlawful.</p>
+
+    <h2>8. Termination</h2>
+    <p>We reserve the right to suspend or terminate your access to the platform at our sole discretion, without notice, if we believe you have violated these terms or engaged in conduct that may harm the platform or its users. Upon termination, your right to access member areas will immediately cease.</p>
+
+    <h2>9. Privacy & Data</h2>
+    <p>Your use of the platform is also governed by our <a href="#" style="color:#2F5D8C;">Privacy Policy</a>, which explains how we collect, use, and protect your personal information. By using the platform, you consent to such collection and use.</p>
+
+    <h2>10. Changes to Terms</h2>
+    <p>We may update these Terms & Conditions from time to time. When we do, we will revise the “Last updated” date at the top. Your continued use of the platform after changes constitutes your acceptance of the revised terms. We encourage you to review this page periodically.</p>
+
+    <h2>11. Governing Law</h2>
+    <p>These terms are governed by the laws of New South Wales, Australia. Any dispute arising out of or relating to these terms or the platform shall be resolved exclusively in the courts of New South Wales.</p>
+
+    <hr>
+
+    <!-- acknowledgement summary block – same soft background -->
+    <div class="soft-bg-block" style="margin:40px 0 20px;">
+      <p style="font-weight:600; margin-bottom:16px;">📌 Acknowledgment summary</p>
+      <ul style="margin-bottom:0;">
+        <li>We do not provide financial product advice.</li>
+        <li>Independent professional advice is mandatory.</li>
+        <li>Membership fees are administrative, not investment funds.</li>
+        <li>All estimates are indicative only.</li>
+        <li>Participation is never guaranteed.</li>
+      </ul>
+    </div>
+
+    <!-- print-only line -->
+    <div class="print-only" style="margin-top:40px; font-size:12px;">© Homeowners Equity & Liquidity Plan – administrative gateway</div>
+
+    <!-- action buttons – minimal, no marketing -->
+    <div style="display:flex; gap:16px; flex-wrap:wrap; margin:40px 0 10px;" class="no-print">
+      <button onclick="window.print()" class="btn btn-outline">🖨️ Print / save PDF</button>
+      <a href="#" class="btn">Return to gateway</a>
+    </div>
+  </div>
+</main>
+
+<!-- FOOTER – exact copy from index -->
+<footer class="no-print">
+  <div class="footer-links">
+    <a href="#">About</a> · <a href="#">Process</a> · <a href="#">Important Info</a> · <a href="#">Admin Login</a>
+  </div>
+  <p style="max-width:700px; margin:20px auto 0;">
+    Homeowners Equity & Liquidity Plan operates as a property research and syndication facilitation platform.<br>
+    Independent professional advice is mandatory.<br>
+    No financial, lending, or investment advice is provided.
+  </p>
+  <p style="margin-top:24px;">© HELP administrative gateway 2026</p>
+</footer>
+
+<script>
+  // fallback for logo if png missing – same as index
+  (function() {
+    const logoImg = document.querySelector('.logo-img');
+    const fallback = document.querySelector('.logo-placeholder');
+    if (logoImg && fallback) {
+      logoImg.onerror = function() {
+        this.style.display = 'none';
+        fallback.style.display = 'flex';
+      };
+    }
+  })();
+</script>
+
+</body>
+</html>

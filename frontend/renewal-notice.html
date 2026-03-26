@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            line-height: 1.6;
+            color: #1F2933;
+            margin: 0;
+            padding: 0;
+            background-color: #F6F7F8;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        .header {
+            background: #2F5D8C;
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 600;
+        }
+        .warning-badge {
+            background: #FEF3C7;
+            color: #92400E;
+            padding: 12px;
+            border-radius: 40px;
+            font-size: 14px;
+            font-weight: 500;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+        .content {
+            padding: 40px 30px;
+        }
+        .info-box {
+            background: #F9FAFC;
+            border: 1px solid #E8EEF5;
+            border-radius: 8px;
+            padding: 25px;
+            margin: 25px 0;
+        }
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #E8EEF5;
+        }
+        .info-row:last-child {
+            border-bottom: none;
+        }
+        .label {
+            color: #6B7280;
+            font-weight: 500;
+        }
+        .value {
+            font-weight: 600;
+            color: #1F2933;
+        }
+        .days-left {
+            font-size: 18px;
+            color: #1F2933;
+            font-weight: 700;
+        }
+        .button {
+            display: inline-block;
+            background: #2F5D8C;
+            color: white;
+            text-decoration: none;
+            padding: 14px 32px;
+            border-radius: 8px;
+            font-weight: 500;
+            margin: 20px 5px;
+        }
+        .button-outline {
+            background: transparent;
+            color: #2F5D8C;
+            border: 1px solid #2F5D8C;
+        }
+        .footer {
+            background: #F6F7F8;
+            padding: 25px;
+            text-align: center;
+            font-size: 13px;
+            color: #6B7280;
+            border-top: 1px solid #E8EEF5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>HELP Gateway</h1>
+            <p style="margin-top: 10px; opacity: 0.9;">Membership Renewal Notice</p>
+        </div>
+        
+        <div class="content">
+            <div style="text-align: center;">
+                <span class="warning-badge">⚠️ {{daysLeft}} Days Until Renewal</span>
+            </div>
+            
+            <h2>Dear {{memberName}},</h2>
+            
+            <p>Your annual membership with HELP Gateway will automatically renew in <strong>{{daysLeft}} days</strong>.</p>
+            
+            <div class="info-box">
+                <div class="info-row">
+                    <span class="label">Current Membership:</span>
+                    <span class="value">Active until {{currentExpiry}}</span>
+                </div>
+                <div class="info-row">
+                    <span class="label">Renewal Date:</span>
+                    <span class="value">{{renewalDate}}</span>
+                </div>
+                <div class="info-row">
+                    <span class="label">Amount:</span>
+                    <span class="value">${{amount}} AUD</span>
+                </div>
+                <div class="info-row">
+                    <span class="label">Days Remaining:</span>
+                    <span class="value days-left">{{daysLeft}}</span>
+                </div>
+            </div>
+            
+            <h3>What You Need To Do:</h3>
+            
+            <ul style="margin-bottom: 30px;">
+                <li><strong>If you wish to continue:</strong> No action required. Your membership will renew automatically.</li>
+                <li><strong>If you wish to cancel:</strong> Please log in to your account or contact us before the renewal date.</li>
+                <li><strong>Update payment method:</strong> Ensure your payment details are current to avoid interruption.</li>
+            </ul>
+            
+            <div style="text-align: center;">
+                <a href="{{dashboardUrl}}" class="button">Manage Membership</a>
+                <a href="{{contactUrl}}" class="button button-outline">Contact Support</a>
+            </div>
+            
+            <p style="margin-top: 30px; font-size: 14px; color: #6B7280;">
+                <strong>Note:</strong> If you've already taken action, please disregard this notice. Renewals are processed automatically 14 days in advance.
+            </p>
+        </div>
+        
+        <div class="footer">
+            <p>Homeowners Equity & Liquidity Plan</p>
+            <p>Independent professional advice is mandatory before entering any transaction.</p>
+            <p>Need help? Contact us at <a href="mailto:support@help.com.au">support@help.com.au</a></p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            line-height: 1.6;
+            color: #1F2933;
+            margin: 0;
+            padding: 0;
+            background-color: #F6F7F8;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        .header {
+            background: #2F5D8C;
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 600;
+        }
+        .content {
+            padding: 40px 30px;
+        }
+        .receipt-box {
+            background: #F9FAFC;
+            border: 1px solid #E8EEF5;
+            border-radius: 8px;
+            padding: 25px;
+            margin: 25px 0;
+        }
+        .receipt-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #E8EEF5;
+        }
+        .receipt-row:last-child {
+            border-bottom: none;
+        }
+        .label {
+            color: #6B7280;
+            font-weight: 500;
+        }
+        .value {
+            font-weight: 600;
+            color: #1F2933;
+        }
+        .total {
+            font-size: 20px;
+            color: #2F5D8C;
+            font-weight: 700;
+        }
+        .button {
+            display: inline-block;
+            background: #2F5D8C;
+            color: white;
+            text-decoration: none;
+            padding: 14px 32px;
+            border-radius: 8px;
+            font-weight: 500;
+            margin: 20px 0;
+        }
+        .footer {
+            background: #F6F7F8;
+            padding: 25px;
+            text-align: center;
+            font-size: 13px;
+            color: #6B7280;
+            border-top: 1px solid #E8EEF5;
+        }
+        .legal {
+            font-size: 12px;
+            color: #9CA3AF;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>HELP Gateway</h1>
+            <p style="margin-top: 10px; opacity: 0.9;">Payment Receipt</p>
+        </div>
+        
+        <div class="content">
+            <h2 style="margin-top: 0;">Thank You for Your Membership</h2>
+            
+            <p>Dear {{memberName}},</p>
+            
+            <p>Your annual membership with HELP Gateway has been successfully activated. Below is your payment receipt:</p>
+            
+            <div class="receipt-box">
+                <div class="receipt-row">
+                    <span class="label">Transaction ID:</span>
+                    <span class="value">{{transactionId}}</span>
+                </div>
+                <div class="receipt-row">
+                    <span class="label">Date:</span>
+                    <span class="value">{{paymentDate}}</span>
+                </div>
+                <div class="receipt-row">
+                    <span class="label">Membership Type:</span>
+                    <span class="value">Annual Administrative</span>
+                </div>
+                <div class="receipt-row">
+                    <span class="label">Amount:</span>
+                    <span class="value">${{amount}} AUD</span>
+                </div>
+                <div class="receipt-row">
+                    <span class="label">Payment Method:</span>
+                    <span class="value">{{paymentMethod}}</span>
+                </div>
+                <div class="receipt-row">
+                    <span class="label">Status:</span>
+                    <span class="value" style="color: #059669;">Paid</span>
+                </div>
+                <div class="receipt-row">
+                    <span class="label">Valid Until:</span>
+                    <span class="value">{{renewalDate}}</span>
+                </div>
+                <div style="margin-top: 20px; padding-top: 20px; border-top: 2px solid #E8EEF5;">
+                    <div class="receipt-row">
+                        <span class="label total">Total Paid:</span>
+                        <span class="value total">${{amount}} AUD</span>
+                    </div>
+                </div>
+            </div>
+            
+            <h3>What Happens Next?</h3>
+            <p>Your submission is now under administrative review. A member of our team will contact you within 48 hours to discuss your portfolio and potential opportunities.</p>
+            
+            <div style="text-align: center;">
+                <a href="{{dashboardUrl}}" class="button">Access Member Portal</a>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Homeowners Equity & Liquidity Plan</p>
+            <p>Independent professional advice is mandatory before entering any transaction.</p>
+            <p>This is an administrative fee, not an investment.</p>
+            <div class="legal">
+                <p>© {{year}} HELP Gateway. All rights reserved.</p>
+                <p>Level 12, 123 George Street, Sydney NSW 2000, Australia</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

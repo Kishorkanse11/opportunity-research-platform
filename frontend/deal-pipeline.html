@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deal Pipeline | Opportunity Research Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #F6F7F8;
+            color: #1F2933;
+            line-height: 1.5;
+        }
+        .header {
+            background: white;
+            border-bottom: 1px solid #E8EEF5;
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .logo h1 { font-size: 24px; font-weight: 700; color: #2F5D8C; }
+        .logo p { font-size: 12px; color: #6B7280; }
+        .nav-links { display: flex; gap: 32px; }
+        .nav-links a { text-decoration: none; color: #4B5563; font-weight: 500; transition: color 0.2s; }
+        .nav-links a:hover, .nav-links a.active { color: #2F5D8C; }
+        .main { min-height: calc(100vh - 200px); padding: 60px 0; }
+        
+        /* Login Card */
+        .login-card {
+            max-width: 450px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 24px;
+            padding: 40px;
+            border: 1px solid #E8EEF5;
+        }
+        .login-card h2 { font-size: 28px; font-weight: 600; margin-bottom: 8px; color: #1F2933; }
+        .login-card .subtitle { color: #6B7280; margin-bottom: 32px; font-size: 14px; }
+        
+        /* A&L Form Card */
+        .ahl-card {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 24px;
+            padding: 40px;
+            border: 1px solid #E8EEF5;
+        }
+        .ahl-card h2 { font-size: 28px; font-weight: 600; margin-bottom: 8px; color: #1F2933; text-align: center; }
+        .ahl-card .subtitle { color: #6B7280; margin-bottom: 32px; font-size: 14px; text-align: center; }
+        
+        .form-group { margin-bottom: 24px; }
+        .form-group label { display: block; font-size: 14px; font-weight: 500; margin-bottom: 8px; color: #4B5563; }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid #E2E8F0;
+            border-radius: 12px;
+            font-size: 15px;
+            background: #F9FAFC;
+        }
+        .form-group input:focus, .form-group select:focus {
+            border-color: #2F5D8C;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(47,93,140,0.1);
+            background: white;
+        }
+        
+        .btn {
+            background: #2F5D8C;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 14px 24px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.2s;
+        }
+        .btn:hover { background: #1f4a73; transform: translateY(-1px); }
+        
+        .alert { padding: 12px 16px; border-radius: 10px; margin-bottom: 24px; display: none; font-size: 14px; }
+        .alert-error { background: #FEE2E2; color: #991B1B; border: 1px solid #FECACA; display: block; }
+        .alert-success { background: #D1FAE5; color: #065F46; border: 1px solid #A7F3D0; display: block; }
+        
+        .footer-links { text-align: center; margin-top: 24px; font-size: 13px; }
+        .footer-links a { color: #2F5D8C; text-decoration: none; }
+        
+        /* Dashboard Content */
+        .dashboard-content { display: none; }
+        .welcome-card {
+            background: linear-gradient(135deg, #2F5D8C 0%, #1A2F4B 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 24px;
+            margin-bottom: 30px;
+        }
+        .welcome-card h2 { font-size: 28px; margin-bottom: 12px; }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+            margin-bottom: 30px;
+        }
+        .stat-card {
+            background: white;
+            padding: 24px;
+            border-radius: 20px;
+            border: 1px solid #E8EEF5;
+        }
+        .stat-card h3 { font-size: 14px; color: #6B7280; margin-bottom: 12px; font-weight: 500; }
+        .stat-value { font-size: 32px; font-weight: 700; color: #2F5D8C; }
+        
+        .financial-summary {
+            background: white;
+            border-radius: 20px;
+            padding: 28px;
+            margin-bottom: 30px;
+            border: 1px solid #E8EEF5;
+        }
+        .financial-summary h3 { margin-bottom: 20px; color: #2F5D8C; font-size: 20px; }
+        .financial-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+        }
+        @media (max-width: 768px) { .financial-grid { grid-template-columns: 1fr; } }
+        .asset-section, .liability-section {
+            background: #F9FAFC;
+            padding: 20px;
+            border-radius: 16px;
+        }
+        .asset-section h4, .liability-section h4 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2F5D8C;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #2F5D8C;
+        }
+        .financial-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #E8EEF5;
+        }
+        .financial-row.total {
+            border-top: 2px solid #2F5D8C;
+            border-bottom: none;
+            margin-top: 10px;
+            padding-top: 12px;
+            font-weight: 700;
+            font-size: 18px;
+        }
+        .net-position-card {
+            margin-top: 24px;
+            padding: 24px;
+            background: linear-gradient(135deg, #2F5D8C 0%, #1A2F4B 100%);
+            border-radius: 16px;
+            text-align: center;
+            color: white;
+        }
+        .net-position-card h4 { font-size: 18px; margin-bottom: 8px; opacity: 0.9; }
+        .net-position-card .value { font-size: 42px; font-weight: 700; color: #F59E0B; }
+        
+        .opportunities-table {
+            background: white;
+            border-radius: 20px;
+            padding: 24px;
+            border: 1px solid #E8EEF5;
+            overflow-x: auto;
+        }
+        table { width: 100%; border-collapse: collapse; }
+        th {
+            text-align: left;
+            padding: 16px 12px;
+            background: #F9FAFC;
+            color: #4B5563;
+            font-weight: 600;
+            font-size: 13px;
+        }
+        td { padding: 16px 12px; border-bottom: 1px solid #F0F4F9; }
+        .stage-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 500; }
+        .stage-1 { background: #F3F4F6; color: #6B7280; }
+        .stage-2 { background: #FEF3C7; color: #92400E; }
+        .stage-3 { background: #DBEAFE; color: #1E40AF; }
+        .stage-4 { background: #E0F2FE; color: #0369A1; }
+        .stage-5 { background: #D1FAE5; color: #065F46; }
+        
+        .auth-status {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            padding: 16px 24px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            border: 1px solid #E8EEF5;
+        }
+        .logout-btn {
+            background: transparent;
+            border: 1px solid #E2E8F0;
+            padding: 8px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        .logout-btn:hover { background: #F9FAFC; }
+        
+        .hidden { display: none; }
+        
+        footer {
+            background: white;
+            text-align: center;
+            padding: 30px;
+            border-top: 1px solid #E8EEF5;
+            margin-top: 40px;
+            font-size: 13px;
+            color: #6B7280;
+        }
+        .loading { text-align: center; padding: 40px; color: #6B7280; }
+        
+        /* Assets & Liabilities Grid inside A&L Form */
+        .ahl-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin: 30px 0;
+        }
+        @media (max-width: 768px) { .ahl-grid { grid-template-columns: 1fr; } }
+        .ahl-section {
+            background: #F9FAFC;
+            padding: 20px;
+            border-radius: 16px;
+        }
+        .ahl-section h4 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2F5D8C;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #2F5D8C;
+        }
+        .ahl-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .ahl-row label {
+            font-size: 14px;
+            font-weight: 500;
+            color: #4B5563;
+            flex: 1;
+        }
+        .ahl-row input {
+            width: 150px;
+            padding: 8px 12px;
+            border: 1px solid #E2E8F0;
+            border-radius: 8px;
+            font-size: 14px;
+            text-align: right;
+        }
+        .ahl-total {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 2px solid #2F5D8C;
+            display: flex;
+            justify-content: space-between;
+            font-weight: 700;
+            font-size: 16px;
+        }
+        .net-position-box {
+            margin-top: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #2F5D8C 0%, #1A2F4B 100%);
+            border-radius: 16px;
+            text-align: center;
+            color: white;
+        }
+        .net-position-box .value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #F59E0B;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <h1>Opportunity Research Platform</h1>
+                    <p>Property & Business Research Since 1970</p>
+                </div>
+                <div class="nav-links">
+                    <a href="index.html">Home</a>
+                    <a href="deal-pipeline.html" class="active">Deal Pipeline</a>
+                    <a href="important-participation-info.html">Important Info</a>
+                    <a href="admin.html">Admin</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <!-- LOGIN SECTION -->
+            <div id="loginSection">
+                <div class="login-card">
+                    <h2>Member Login</h2>
+                    <p class="subtitle">Enter your credentials to access the Deal Pipeline</p>
+                    <div id="loginAlert" class="alert"></div>
+                    <form id="loginForm">
+                        <div class="form-group">
+                            <label>Email Address</label>
+                            <input type="email" id="email" placeholder="your@email.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" id="password" placeholder="••••••••" required>
+                        </div>
+                        <button type="submit" class="btn">Access Deal Pipeline</button>
+                    </form>
+                    <div class="footer-links">
+                        <a href="reset-password.html">Forgot Password?</a> |
+                        <a href="index.html#membership">Not a member? Join now</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- A&L FORM SECTION (Shown if member has not completed A&L) -->
+            <div id="ahlSection" class="hidden">
+                <div class="ahl-card">
+                    <h2>📊 Complete Your Financial Profile</h2>
+                    <p class="subtitle">Please complete your Assets & Liabilities to access the Deal Pipeline</p>
+                    
+                    <div id="ahlAlert" class="alert"></div>
+                    
+                    <!-- LVR Calculator -->
+                    <div style="background: #F9FAFC; padding: 20px; border-radius: 16px; margin-bottom: 30px;">
+                        <h3 style="margin-bottom: 15px; color: #2F5D8C;">Loan-to-Value Ratio</h3>
+                        <div class="ahl-row">
+                            <label>Property Value ($)</label>
+                            <input type="number" id="ahlPropertyValue" placeholder="0" value="0">
+                        </div>
+                        <div class="ahl-row">
+                            <label>Mortgage Balance ($)</label>
+                            <input type="number" id="ahlMortgageBalance" placeholder="0" value="0">
+                        </div>
+                        <div style="margin-top: 15px; padding-top: 10px; border-top: 1px solid #E8EEF5; display: flex; justify-content: space-between;">
+                            <span><strong>LVR:</strong></span>
+                            <span id="ahlLvrResult">0%</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span><strong>Estimated Equity:</strong></span>
+                            <span id="ahlEquityResult">$0</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Assets & Liabilities Grid -->
+                    <div class="ahl-grid">
+                        <div class="ahl-section">
+                            <h4>Assets</h4>
+                            <div class="ahl-row">
+                                <label>Cash & Savings ($)</label>
+                                <input type="number" id="ahlCashAssets" placeholder="0" value="0">
+                            </div>
+                            <div class="ahl-row">
+                                <label>Property Assets ($)</label>
+                                <input type="number" id="ahlPropertyAssets" placeholder="0" value="0">
+                            </div>
+                            <div class="ahl-row">
+                                <label>Shares & Investments ($)</label>
+                                <input type="number" id="ahlInvestmentAssets" placeholder="0" value="0">
+                            </div>
+                            <div class="ahl-row">
+                                <label>Superannuation ($)</label>
+                                <input type="number" id="ahlSuperAssets" placeholder="0" value="0">
+                            </div>
+                            <div class="ahl-row">
+                                <label>Other Assets ($)</label>
+                                <input type="number" id="ahlOtherAssets" placeholder="0" value="0">
+                            </div>
+                            <div class="ahl-total">
+                                <span>Total Assets:</span>
+                                <span id="ahlTotalAssets">$0</span>
+                            </div>
+                        </div>
+                        
+                        <div class="ahl-section">
+                            <h4>Liabilities</h4>
+                            <div class="ahl-row">
+                                <label>Mortgage Balance ($)</label>
+                                <input type="number" id="ahlMortgageLiabilities" placeholder="0" value="0">
+                            </div>
+                            <div class="ahl-row">
+                                <label>Credit Cards ($)</label>
+                                <input type="number" id="ahlCreditLiabilities" placeholder="0" value="0">
+                            </div>
+                            <div class="ahl-row">
+                                <label>Personal Loans ($)</label>
+                                <input type="number" id="ahlLoanLiabilities" placeholder="0" value="0">
+                            </div>
+                            <div class="ahl-row">
+                                <label>Investment Loans ($)</label>
+                                <input type="number" id="ahlInvestmentLiabilities" placeholder="0" value="0">
+                            </div>
+                            <div class="ahl-row">
+                                <label>Other Liabilities ($)</label>
+                                <input type="number" id="ahlOtherLiabilities" placeholder="0" value="0">
+                            </div>
+                            <div class="ahl-total">
+                                <span>Total Liabilities:</span>
+                                <span id="ahlTotalLiabilities">$0</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Net Position -->
+                    <div class="net-position-box">
+                        <h4>Your Estimated Net Position</h4>
+                        <div class="value" id="ahlNetPosition">$0</div>
+                        <p style="margin-top: 10px; font-size: 13px; opacity: 0.8;">Assets minus Liabilities</p>
+                    </div>
+                    
+                    <button class="btn" id="submitAhlBtn" style="margin-top: 30px;">Save & Continue →</button>
+                </div>
+            </div>
+            
+            <!-- DASHBOARD SECTION (Shown after A&L completed) -->
+            <div id="dashboardSection" class="dashboard-content">
+                <div class="auth-status">
+                    <div>
+                        <strong id="memberName"></strong>
+                        <span id="memberBadge" style="margin-left: 12px; padding: 4px 12px; background: #D1FAE5; color: #065F46; border-radius: 20px; font-size: 12px;">Active Member</span>
+                    </div>
+                    <button class="logout-btn" onclick="logout()">Logout</button>
+                </div>
+                
+                <div class="welcome-card">
+                    <h2>Welcome back, <span id="welcomeName"></span>!</h2>
+                    <p>Here is your financial summary and current opportunities.</p>
+                </div>
+                
+                <div class="financial-summary">
+                    <h3>📊 Your Financial Position</h3>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 30px; background: #F9FAFC; padding: 20px; border-radius: 16px;">
+                        <div style="text-align: center;"><div style="font-size: 14px; color: #6B7280;">Property Value</div><div style="font-size: 28px; font-weight: 700; color: #2F5D8C;" id="displayPropertyValue">$0</div></div>
+                        <div style="text-align: center;"><div style="font-size: 14px; color: #6B7280;">Mortgage Balance</div><div style="font-size: 28px; font-weight: 700; color: #2F5D8C;" id="displayMortgageBalance">$0</div></div>
+                        <div style="text-align: center;"><div style="font-size: 14px; color: #6B7280;">Loan-to-Value Ratio</div><div style="font-size: 28px; font-weight: 700; color: #2F5D8C;" id="displayLVR">—</div></div>
+                    </div>
+                    
+                    <div class="financial-grid">
+                        <div class="asset-section">
+                            <h4>Assets</h4>
+                            <div class="financial-row"><span>Cash & Savings</span><strong id="displayCashAssets">$0</strong></div>
+                            <div class="financial-row"><span>Property Assets</span><strong id="displayPropertyAssets">$0</strong></div>
+                            <div class="financial-row"><span>Shares & Investments</span><strong id="displayInvestmentAssets">$0</strong></div>
+                            <div class="financial-row"><span>Superannuation</span><strong id="displaySuperAssets">$0</strong></div>
+                            <div class="financial-row"><span>Other Assets</span><strong id="displayOtherAssets">$0</strong></div>
+                            <div class="financial-row total"><span>Total Assets</span><strong id="displayTotalAssets">$0</strong></div>
+                        </div>
+                        <div class="liability-section">
+                            <h4>Liabilities</h4>
+                            <div class="financial-row"><span>Mortgage Balance</span><strong id="displayMortgageLiabilities">$0</strong></div>
+                            <div class="financial-row"><span>Credit Cards</span><strong id="displayCreditLiabilities">$0</strong></div>
+                            <div class="financial-row"><span>Personal Loans</span><strong id="displayLoanLiabilities">$0</strong></div>
+                            <div class="financial-row"><span>Investment Loans</span><strong id="displayInvestmentLiabilities">$0</strong></div>
+                            <div class="financial-row"><span>Other Liabilities</span><strong id="displayOtherLiabilities">$0</strong></div>
+                            <div class="financial-row total"><span>Total Liabilities</span><strong id="displayTotalLiabilities">$0</strong></div>
+                        </div>
+                    </div>
+                    <div class="net-position-card">
+                        <h4>Your Estimated Net Position</h4>
+                        <div class="value" id="displayNetPosition">$0</div>
+                        <p style="margin-top: 12px; font-size: 14px; opacity: 0.8;">Assets minus Liabilities</p>
+                    </div>
+                </div>
+                
+                <div class="opportunities-table">
+                    <h3 style="margin-bottom: 20px;">📊 Current Opportunities</h3>
+                    <table>
+                        <thead> <tr><th>Opportunity Type</th><th>Location</th><th>Stage</th><th>Notes</th></tr> </thead>
+                        <tbody id="opportunitiesTable"><tr><td colspan="4" class="loading">Loading opportunities...</td></tr></tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div id="restrictedSection" class="hidden">
+                <div class="restricted-card">
+                    <h3 style="color: #92400E; margin-bottom: 16px;">🔒 Deal Pipeline Access Restricted</h3>
+                    <p>The Deal Pipeline is available only to Fully Paid Members.</p>
+                    <p style="margin: 16px 0;">Your membership is either inactive or expired.</p>
+                    <a href="index.html#membership" class="btn" style="width: auto; padding: 12px 24px;">Renew Membership</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2026 Opportunity Research Platform. All rights reserved.</p>
+        <p style="margin-top: 8px;"><a href="privacy-policy.html" style="color: #2F5D8C;">Privacy Policy</a> | <a href="terms-of-service.html" style="color: #2F5D8C;">Terms of Service</a></p>
+    </footer>
+
+    <script>
+        const API_BASE = 'http://localhost:3000/api';
+        let currentMemberId = null;
+        
+        function formatCurrency(value) {
+            if (!value && value !== 0) return '$0';
+            return '$' + parseFloat(value).toLocaleString();
+        }
+        
+        // Update A&L Calculator
+        function updateAhlCalculator() {
+            const propValue = parseFloat(document.getElementById('ahlPropertyValue').value) || 0;
+            const mortgageBal = parseFloat(document.getElementById('ahlMortgageBalance').value) || 0;
+            
+            if (propValue > 0) {
+                const lvr = (mortgageBal / propValue) * 100;
+                document.getElementById('ahlLvrResult').textContent = lvr.toFixed(1) + '%';
+                const equity = propValue - mortgageBal;
+                document.getElementById('ahlEquityResult').textContent = formatCurrency(equity);
+            } else {
+                document.getElementById('ahlLvrResult').textContent = '—';
+                document.getElementById('ahlEquityResult').textContent = '$0';
+            }
+            
+            const cashAssets = parseFloat(document.getElementById('ahlCashAssets').value) || 0;
+            const propertyAssets = parseFloat(document.getElementById('ahlPropertyAssets').value) || 0;
+            const investmentAssets = parseFloat(document.getElementById('ahlInvestmentAssets').value) || 0;
+            const superAssets = parseFloat(document.getElementById('ahlSuperAssets').value) || 0;
+            const otherAssets = parseFloat(document.getElementById('ahlOtherAssets').value) || 0;
+            const totalAssets = cashAssets + propertyAssets + investmentAssets + superAssets + otherAssets;
+            document.getElementById('ahlTotalAssets').textContent = formatCurrency(totalAssets);
+            
+            const mortgageLiabilities = parseFloat(document.getElementById('ahlMortgageLiabilities').value) || 0;
+            const creditLiabilities = parseFloat(document.getElementById('ahlCreditLiabilities').value) || 0;
+            const loanLiabilities = parseFloat(document.getElementById('ahlLoanLiabilities').value) || 0;
+            const investmentLiabilities = parseFloat(document.getElementById('ahlInvestmentLiabilities').value) || 0;
+            const otherLiabilities = parseFloat(document.getElementById('ahlOtherLiabilities').value) || 0;
+            const totalLiabilities = mortgageLiabilities + creditLiabilities + loanLiabilities + investmentLiabilities + otherLiabilities;
+            document.getElementById('ahlTotalLiabilities').textContent = formatCurrency(totalLiabilities);
+            
+            const netPosition = totalAssets - totalLiabilities;
+            document.getElementById('ahlNetPosition').textContent = formatCurrency(netPosition);
+        }
+        
+        document.getElementById('ahlPropertyValue').addEventListener('input', updateAhlCalculator);
+        document.getElementById('ahlMortgageBalance').addEventListener('input', updateAhlCalculator);
+        document.getElementById('ahlCashAssets').addEventListener('input', updateAhlCalculator);
+        document.getElementById('ahlPropertyAssets').addEventListener('input', updateAhlCalculator);
+        document.getElementById('ahlInvestmentAssets').addEventListener('input', updateAhlCalculator);
+        document.getElementById('ahlSuperAssets').addEventListener('input', updateAhlCalculator);
+        document.getElementById('ahlOtherAssets').addEventListener('input', updateAhlCalculator);
+        document.getElementById('ahlMortgageLiabilities').addEventListener('input', updateAhlCalculator);
+        document.getElementById('ahlCreditLiabilities').addEventListener('input', updateAhlCalculator);
+        document.getElementById('ahlLoanLiabilities').addEventListener('input', updateAhlCalculator);
+        document.getElementById('ahlInvestmentLiabilities').addEventListener('input', updateAhlCalculator);
+        document.getElementById('ahlOtherLiabilities').addEventListener('input', updateAhlCalculator);
+        
+        // Submit A&L Data
+        document.getElementById('submitAhlBtn').addEventListener('click', async () => {
+            const token = localStorage.getItem('memberToken');
+            const memberId = localStorage.getItem('memberId');
+            const alertDiv = document.getElementById('ahlAlert');
+            
+            const formData = {
+                propertyValue: parseFloat(document.getElementById('ahlPropertyValue').value) || 0,
+                mortgageBalance: parseFloat(document.getElementById('ahlMortgageBalance').value) || 0,
+                cashAssets: parseFloat(document.getElementById('ahlCashAssets').value) || 0,
+                propertyAssets: parseFloat(document.getElementById('ahlPropertyAssets').value) || 0,
+                investmentAssets: parseFloat(document.getElementById('ahlInvestmentAssets').value) || 0,
+                superAssets: parseFloat(document.getElementById('ahlSuperAssets').value) || 0,
+                otherAssets: parseFloat(document.getElementById('ahlOtherAssets').value) || 0,
+                mortgageLiabilities: parseFloat(document.getElementById('ahlMortgageLiabilities').value) || 0,
+                creditLiabilities: parseFloat(document.getElementById('ahlCreditLiabilities').value) || 0,
+                loanLiabilities: parseFloat(document.getElementById('ahlLoanLiabilities').value) || 0,
+                investmentLiabilities: parseFloat(document.getElementById('ahlInvestmentLiabilities').value) || 0,
+                otherLiabilities: parseFloat(document.getElementById('ahlOtherLiabilities').value) || 0
+            };
+            
+            try {
+                const response = await fetch(`${API_BASE}/members/${memberId}/ahl`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    alertDiv.className = 'alert alert-success';
+                    alertDiv.textContent = '✅ Financial profile saved! Loading dashboard...';
+                    alertDiv.style.display = 'block';
+                    setTimeout(() => {
+                        checkMemberStatus();
+                    }, 1500);
+                } else {
+                    alertDiv.className = 'alert alert-error';
+                    alertDiv.textContent = data.error || 'Failed to save data';
+                    alertDiv.style.display = 'block';
+                }
+            } catch (error) {
+                alertDiv.className = 'alert alert-error';
+                alertDiv.textContent = 'Connection error. Please try again.';
+                alertDiv.style.display = 'block';
+            }
+        });
+        
+        // Login Form
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const alertDiv = document.getElementById('loginAlert');
+            
+            alertDiv.className = 'alert';
+            alertDiv.style.display = 'none';
+            
+            if (!email || !password) {
+                alertDiv.className = 'alert alert-error';
+                alertDiv.textContent = 'Please enter both email and password';
+                alertDiv.style.display = 'block';
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE}/member-auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                const data = await response.json();
+                
+                if (response.ok) {
+                    localStorage.setItem('memberToken', data.token);
+                    localStorage.setItem('memberId', data.member.id);
+                    localStorage.setItem('memberName', data.member.full_name);
+                    localStorage.setItem('memberStatus', data.member.status);
+                    localStorage.setItem('memberData', JSON.stringify(data.member));
+                    currentMemberId = data.member.id;
+                    
+                    alertDiv.className = 'alert alert-success';
+                    alertDiv.textContent = 'Login successful!';
+                    alertDiv.style.display = 'block';
+                    setTimeout(() => { checkMemberStatus(); }, 1000);
+                } else {
+                    alertDiv.className = 'alert alert-error';
+                    alertDiv.textContent = data.error || 'Login failed';
+                    alertDiv.style.display = 'block';
+                }
+            } catch (error) {
+                alertDiv.className = 'alert alert-error';
+                alertDiv.textContent = 'Connection error. Please try again.';
+                alertDiv.style.display = 'block';
+            }
+        });
+        
+        async function checkMemberStatus() {
+            const token = localStorage.getItem('memberToken');
+            const memberId = localStorage.getItem('memberId');
+            const loginSection = document.getElementById('loginSection');
+            const ahlSection = document.getElementById('ahlSection');
+            const dashboardSection = document.getElementById('dashboardSection');
+            
+            loginSection.style.display = 'block';
+            ahlSection.classList.add('hidden');
+            dashboardSection.style.display = 'none';
+            
+            if (!token || !memberId) {
+                loginSection.style.display = 'block';
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE}/member/members/${memberId}/status`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (!response.ok) throw new Error('Not authenticated');
+                const member = await response.json();
+                
+                if (member.status !== 'active') {
+                    loginSection.style.display = 'none';
+                    document.getElementById('restrictedSection').classList.remove('hidden');
+                    return;
+                }
+                
+                // Check if A&L is completed (submission has non-zero data)
+                const financialRes = await fetch(`${API_BASE}/member/financial/${memberId}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const financialData = await financialRes.json();
+                const hasAhlData = financialData.total_valuation > 0 || financialData.cash_assets > 0 || 
+                                    financialData.property_assets > 0 || financialData.investment_assets > 0;
+                
+                if (!hasAhlData) {
+                    loginSection.style.display = 'none';
+                    ahlSection.classList.remove('hidden');
+                    document.getElementById('memberName').textContent = member.full_name;
+                } else {
+                    loginSection.style.display = 'none';
+                    dashboardSection.style.display = 'block';
+                    document.getElementById('memberName').textContent = member.full_name;
+                    document.getElementById('welcomeName').textContent = member.full_name;
+                    await loadMemberFinancialData(token, memberId);
+                    await loadOpportunities(token);
+                }
+            } catch (error) {
+                localStorage.removeItem('memberToken');
+                localStorage.removeItem('memberId');
+                localStorage.removeItem('memberName');
+                localStorage.removeItem('memberStatus');
+                loginSection.style.display = 'block';
+            }
+        }
+        
+        async function loadMemberFinancialData(token, memberId) {
+            try {
+                const response = await fetch(`${API_BASE}/member/financial/${memberId}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById('displayPropertyValue').textContent = formatCurrency(data.total_valuation);
+                    document.getElementById('displayMortgageBalance').textContent = formatCurrency(data.total_mortgage);
+                    document.getElementById('displayLVR').textContent = data.lvr ? parseFloat(data.lvr).toFixed(1) + '%' : '—';
+                    document.getElementById('displayCashAssets').textContent = formatCurrency(data.cash_assets);
+                    document.getElementById('displayPropertyAssets').textContent = formatCurrency(data.property_assets);
+                    document.getElementById('displayInvestmentAssets').textContent = formatCurrency(data.investment_assets);
+                    document.getElementById('displaySuperAssets').textContent = formatCurrency(data.super_assets);
+                    document.getElementById('displayOtherAssets').textContent = formatCurrency(data.other_assets);
+                    document.getElementById('displayMortgageLiabilities').textContent = formatCurrency(data.mortgage_liabilities);
+                    document.getElementById('displayCreditLiabilities').textContent = formatCurrency(data.credit_liabilities);
+                    document.getElementById('displayLoanLiabilities').textContent = formatCurrency(data.loan_liabilities);
+                    document.getElementById('displayInvestmentLiabilities').textContent = formatCurrency(data.investment_liabilities);
+                    document.getElementById('displayOtherLiabilities').textContent = formatCurrency(data.other_liabilities);
+                    
+                    const totalAssets = (parseFloat(data.cash_assets) || 0) + (parseFloat(data.property_assets) || 0) + 
+                                        (parseFloat(data.investment_assets) || 0) + (parseFloat(data.super_assets) || 0) + 
+                                        (parseFloat(data.other_assets) || 0);
+                    const totalLiabilities = (parseFloat(data.mortgage_liabilities) || 0) + (parseFloat(data.credit_liabilities) || 0) + 
+                                             (parseFloat(data.loan_liabilities) || 0) + (parseFloat(data.investment_liabilities) || 0) + 
+                                             (parseFloat(data.other_liabilities) || 0);
+                    document.getElementById('displayTotalAssets').textContent = formatCurrency(totalAssets);
+                    document.getElementById('displayTotalLiabilities').textContent = formatCurrency(totalLiabilities);
+                    document.getElementById('displayNetPosition').textContent = formatCurrency(totalAssets - totalLiabilities);
+                }
+            } catch (error) { console.error(error); }
+        }
+        
+        async function loadOpportunities(token) {
+            try {
+                const response = await fetch(`${API_BASE}/member/opportunities`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (response.ok) {
+                    const opportunities = await response.json();
+                    const tbody = document.getElementById('opportunitiesTable');
+                    const stageTexts = ['Initial Research', 'Preliminary Review', 'Feasibility Evaluation', 'Structuring Review', 'Member Consideration'];
+                    if (!opportunities || opportunities.length === 0) {
+                        tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 40px;">No opportunities available at this time.72</td></tr>';
+                        return;
+                    }
+                    let html = '';
+                    opportunities.forEach(opp => {
+                        const stageClass = `stage-${opp.stage}`;
+                        const stageText = stageTexts[opp.stage - 1] || 'Unknown';
+                        html += `<tr><td><strong>${opp.type || '—'}</strong></td><td>${opp.location || '—'}</td><td><span class="stage-badge ${stageClass}">${stageText}</span></td><td>${opp.notes || '—'}</td></tr>`;
+                    });
+                    tbody.innerHTML = html;
+                }
+            } catch (error) { document.getElementById('opportunitiesTable').innerHTML = '<tr><td colspan="4" style="text-align: center;">Error loading opportunities</td></tr>'; }
+        }
+        
+        function logout() {
+            localStorage.clear();
+            window.location.reload();
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() { checkMemberStatus(); });
+    </script>
+</body>
+</html>

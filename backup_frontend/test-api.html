@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Test Dashboard | Opportunity Research Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #F6F7F8;
+            color: #1F2933;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: #2F5D8C;
+        }
+        .status-bar {
+            background: white;
+            border-radius: 12px;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            border: 1px solid #E8EEF5;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .server-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        .dot-online { background: #10B981; box-shadow: 0 0 5px #10B981; }
+        .dot-offline { background: #EF4444; }
+        .dot-checking { background: #F59E0B; animation: pulse 1.5s infinite; }
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.4; }
+            100% { opacity: 1; }
+        }
+        .token-input {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .token-input input {
+            padding: 8px 12px;
+            border: 1px solid #E2E8F0;
+            border-radius: 8px;
+            font-size: 12px;
+            width: 300px;
+            font-family: monospace;
+        }
+        button {
+            background: #2F5D8C;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+        }
+        button:hover { background: #1f4a73; }
+        .clear-btn { background: #6B7280; }
+        .clear-btn:hover { background: #4B5563; }
+        .test-btn { background: #059669; }
+        .test-btn:hover { background: #047857; }
+        
+        .api-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 20px;
+        }
+        .api-card {
+            background: white;
+            border-radius: 16px;
+            border: 1px solid #E8EEF5;
+            overflow: hidden;
+        }
+        .api-header {
+            background: #F9FAFC;
+            padding: 15px 20px;
+            border-bottom: 1px solid #E8EEF5;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .api-method {
+            font-size: 12px;
+            font-weight: 600;
+            padding: 4px 8px;
+            border-radius: 6px;
+        }
+        .method-get { background: #D1FAE5; color: #065F46; }
+        .method-post { background: #DBEAFE; color: #1E40AF; }
+        .method-put { background: #FEF3C7; color: #92400E; }
+        .method-delete { background: #FEE2E2; color: #991B1B; }
+        .api-url {
+            font-family: monospace;
+            font-size: 13px;
+            color: #4B5563;
+            word-break: break-all;
+        }
+        .api-body {
+            padding: 15px 20px;
+            border-bottom: 1px solid #F0F4F9;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .api-response {
+            padding: 15px 20px;
+            background: #1F2933;
+            color: #E5E7EB;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+        .loading {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+        .success { border-left: 4px solid #10B981; }
+        .error { border-left: 4px solid #EF4444; }
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+        .badge-success { background: #D1FAE5; color: #065F46; }
+        .badge-error { background: #FEE2E2; color: #991B1B; }
+        .timestamp {
+            font-size: 11px;
+            color: #9CA3AF;
+            margin-top: 8px;
+        }
+        footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 12px;
+            color: #6B7280;
+        }
+        @media (max-width: 768px) {
+            .api-grid { grid-template-columns: 1fr; }
+            .token-input input { width: 200px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 API Test Dashboard</h1>
+        
+        <div class="status-bar">
+            <div class="server-status">
+                <span class="status-dot dot-checking" id="serverDot"></span>
+                <span id="serverStatus">Checking server...</span>
+            </div>
+            <div class="token-input">
+                <input type="text" id="adminToken" placeholder="Admin Token (auto-filled after login)" readonly>
+                <button onclick="loginAdmin()">🔑 Login as Admin</button>
+                <button onclick="clearToken()" class="clear-btn">Clear Token</button>
+                <button onclick="runAllTests()" class="test-btn">▶ Run All Tests</button>
+            </div>
+        </div>
+        
+        <div class="api-grid" id="apiGrid">
+            <!-- API cards will be populated here -->
+        </div>
+        
+        <footer>
+            <p>API Test Dashboard | Opportunity Research Platform</p>
+            <p>Use this tool to test all backend endpoints</p>
+        </footer>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:3000/api';
+        let adminToken = localStorage.getItem('adminToken') || '';
+        
+        // API Endpoints to test
+        const endpoints = [
+            { name: 'Health Check', method: 'GET', url: '/health', fullUrl: 'http://localhost:3000/health', auth: false, body: null },
+            { name: 'Admin Login', method: 'POST', url: '/auth/login', fullUrl: `${API_BASE}/auth/login`, auth: false, body: { email: 'admin', password: 'Admin@123' } },
+            { name: 'Get All Members', method: 'GET', url: '/members', fullUrl: `${API_BASE}/members`, auth: true, body: null },
+            { name: 'Get All Submissions', method: 'GET', url: '/submissions', fullUrl: `${API_BASE}/submissions`, auth: true, body: null },
+            { name: 'Get All Payments', method: 'GET', url: '/payments', fullUrl: `${API_BASE}/payments`, auth: true, body: null },
+            { name: 'Get Member Stats', method: 'GET', url: '/members/stats/summary', fullUrl: `${API_BASE}/members/stats/summary`, auth: true, body: null },
+            { name: 'Member Login', method: 'POST', url: '/member-auth/login', fullUrl: `${API_BASE}/member-auth/login`, auth: false, body: { email: 'test@example.com', password: 'test123' } },
+            { name: 'Get Opportunities', method: 'GET', url: '/member/opportunities', fullUrl: `${API_BASE}/member/opportunities`, auth: true, body: null },
+            { name: 'Create Test Member (EOI)', method: 'POST', url: '/members', fullUrl: `${API_BASE}/members`, auth: true, body: {
+                fullName: 'API Test User',
+                email: `test${Date.now()}@example.com`,
+                phone: '0412345678',
+                propertyProfile: 'Test property for API testing',
+                optionsExplored: 'Testing all endpoints',
+                participationType: 'cash',
+                propertyValue: 500000,
+                mortgageBalance: 300000,
+                cashAssets: 50000,
+                propertyAssets: 500000,
+                investmentAssets: 100000,
+                complianceConfirmed: true,
+                infoAccuracyConfirmed: true,
+                ipAddress: '127.0.0.1'
+            } },
+            { name: 'Get Admin Logs', method: 'GET', url: '/admin/logs?limit=10', fullUrl: `${API_BASE}/admin/logs?limit=10`, auth: true, body: null },
+            { name: 'Get Member Status', method: 'GET', url: '/member/members/1/status', fullUrl: `${API_BASE}/member/members/1/status`, auth: true, body: null }
+        ];
+        
+        let testResults = {};
+        
+        // Initialize
+        document.getElementById('adminToken').value = adminToken;
+        checkServerHealth();
+        renderApiCards();
+        
+        async function checkServerHealth() {
+            const dot = document.getElementById('serverDot');
+            const statusText = document.getElementById('serverStatus');
+            
+            try {
+                const response = await fetch('http://localhost:3000/health');
+                const data = await response.json();
+                dot.className = 'status-dot dot-online';
+                statusText.innerHTML = `✅ Server: ${data.status} | DB: ${data.database} | ${new Date(data.timestamp).toLocaleTimeString()}`;
+            } catch (error) {
+                dot.className = 'status-dot dot-offline';
+                statusText.innerHTML = '❌ Server offline - Make sure backend is running on port 3000';
+            }
+        }
+        
+        async function loginAdmin() {
+            const loginEndpoint = endpoints.find(e => e.name === 'Admin Login');
+            if (!loginEndpoint) return;
+            
+            try {
+                const response = await fetch(loginEndpoint.fullUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(loginEndpoint.body)
+                });
+                const data = await response.json();
+                
+                if (response.ok && data.token) {
+                    adminToken = data.token;
+                    localStorage.setItem('adminToken', adminToken);
+                    document.getElementById('adminToken').value = adminToken;
+                    updateCardResult('Admin Login', { success: true, data: { token: data.token.substring(0, 30) + '...' } });
+                    alert('✅ Admin login successful! Token saved.');
+                    runAllTests();
+                } else {
+                    updateCardResult('Admin Login', { success: false, error: data.error || 'Login failed' });
+                }
+            } catch (error) {
+                updateCardResult('Admin Login', { success: false, error: error.message });
+            }
+        }
+        
+        function clearToken() {
+            adminToken = '';
+            localStorage.removeItem('adminToken');
+            document.getElementById('adminToken').value = '';
+            alert('Token cleared');
+        }
+        
+        async function testEndpoint(endpoint) {
+            const headers = { 'Content-Type': 'application/json' };
+            if (endpoint.auth && adminToken) {
+                headers['Authorization'] = `Bearer ${adminToken}`;
+            }
+            
+            const options = {
+                method: endpoint.method,
+                headers: headers
+            };
+            
+            if (endpoint.body && (endpoint.method === 'POST' || endpoint.method === 'PUT')) {
+                options.body = JSON.stringify(endpoint.body);
+            }
+            
+            const startTime = Date.now();
+            
+            try {
+                const response = await fetch(endpoint.fullUrl, options);
+                const data = await response.json().catch(() => ({ error: 'Invalid JSON response' }));
+                const duration = Date.now() - startTime;
+                
+                return {
+                    success: response.ok,
+                    status: response.status,
+                    duration: duration,
+                    data: data
+                };
+            } catch (error) {
+                return {
+                    success: false,
+                    status: 0,
+                    duration: Date.now() - startTime,
+                    error: error.message
+                };
+            }
+        }
+        
+        function updateCardResult(endpointName, result) {
+            const card = document.querySelector(`[data-endpoint="${endpointName}"]`);
+            if (!card) return;
+            
+            const responseDiv = card.querySelector('.api-response');
+            if (result.success) {
+                card.classList.add('success');
+                card.classList.remove('error');
+                responseDiv.innerHTML = `
+                    <div style="color: #10B981; margin-bottom: 8px;">✓ Status: ${result.status || 200} (${result.duration}ms)</div>
+                    <pre style="margin: 0; overflow-x: auto;">${JSON.stringify(result.data, null, 2)}</pre>
+                `;
+            } else {
+                card.classList.add('error');
+                card.classList.remove('success');
+                responseDiv.innerHTML = `
+                    <div style="color: #EF4444; margin-bottom: 8px;">✗ Error: ${result.error || 'Request failed'}</div>
+                    <div style="color: #F59E0B;">Status: ${result.status || 'No response'}</div>
+                    ${result.data ? `<pre style="margin-top: 8px;">${JSON.stringify(result.data, null, 2)}</pre>` : ''}
+                `;
+            }
+        }
+        
+        async function runAllTests() {
+            const cards = document.querySelectorAll('.api-card');
+            cards.forEach(card => {
+                card.classList.remove('success', 'error');
+                const responseDiv = card.querySelector('.api-response');
+                responseDiv.innerHTML = '<div style="color: #F59E0B;">⏳ Testing...</div>';
+            });
+            
+            for (const endpoint of endpoints) {
+                const result = await testEndpoint(endpoint);
+                updateCardResult(endpoint.name, result);
+                await new Promise(resolve => setTimeout(resolve, 200));
+            }
+            
+            // Check server health again
+            checkServerHealth();
+        }
+        
+        function renderApiCards() {
+            const grid = document.getElementById('apiGrid');
+            grid.innerHTML = endpoints.map(endpoint => `
+                <div class="api-card" data-endpoint="${endpoint.name}">
+                    <div class="api-header">
+                        <div>
+                            <span class="api-method method-${endpoint.method.toLowerCase()}">${endpoint.method}</span>
+                            <span class="api-url">${endpoint.url}</span>
+                        </div>
+                        <button onclick="testEndpointByName('${endpoint.name}')" style="padding: 4px 12px; font-size: 12px;">Test</button>
+                    </div>
+                    <div class="api-body">
+                        <div><strong>Full URL:</strong> ${endpoint.fullUrl}</div>
+                        ${endpoint.auth ? '<div><span class="badge badge-success">🔐 Auth Required</span></div>' : '<div><span class="badge">🌐 Public</span></div>'}
+                        ${endpoint.body ? `<div style="margin-top: 8px;"><strong>Request Body:</strong><pre style="font-size: 11px; background: #F9FAFC; padding: 8px; border-radius: 4px; margin-top: 4px;">${JSON.stringify(endpoint.body, null, 2)}</pre></div>` : ''}
+                    </div>
+                    <div class="api-response">
+                        <div style="color: #9CA3AF;">Click "Test" to run this endpoint</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        window.testEndpointByName = async function(name) {
+            const endpoint = endpoints.find(e => e.name === name);
+            if (!endpoint) return;
+            
+            const card = document.querySelector(`[data-endpoint="${name}"]`);
+            const responseDiv = card.querySelector('.api-response');
+            responseDiv.innerHTML = '<div style="color: #F59E0B;">⏳ Testing...</div>';
+            card.classList.remove('success', 'error');
+            
+            const result = await testEndpoint(endpoint);
+            updateCardResult(name, result);
+        };
+        
+        // Auto-run tests every 30 seconds
+        setInterval(() => {
+            if (document.visibilityState === 'visible') {
+                checkServerHealth();
+            }
+        }, 30000);
+        
+        setInterval(runAllTests, 60000); // Run all tests every minute
+    </script>
+</body>
+</html>
